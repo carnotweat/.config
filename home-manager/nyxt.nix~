@@ -1,0 +1,39 @@
+# final: prev: rec {
+#   nyxt = prev.nyxt.overrideAttrs (old: {
+#     version = "3-pre-release-2";
+#     installPhase = ''
+#       gappsWrapperArgs+=(
+#         --set WEBKIT_FORCE_SANDBOX 0
+#       )
+#     '' + old.installPhase;
+#   });
+
+#   lispPackages = prev.lispPackages // {
+#     nyxt = prev.lispPackages.nyxt.overrideAttrs (old: rec {
+#       version = "3-pre-release-2";
+#       src = prev.fetchFromGitHub {
+#         owner = "atlas-engineer";
+#         repo = "nyxt";
+#         rev = "${version}";
+#         sha256 = "0ancmbqpkzlnwp4g2f7gfwdpcb3mk8wsfrwsm87i168h8kn6bnj4";
+#       };
+#     });
+#   };
+# }
+    (self: super: rec {
+      nyxt = super.nyxt.overrideAttrs (old: {
+        version = "3-pre-release-2";
+      });
+      lispPackages = super.lispPackages // {
+        nyxt = super.lispPackages.nyxt.overrideAttrs (old: rec {
+          version = "3-pre-release-2";
+          patches = [];
+          src = super.fetchFromGitHub {
+            owner = "atlas-engineer";
+            repo = "nyxt";
+            rev = "${version}";
+            sha256 = "0ancmbqpkzlnwp4g2f7gfwdpcb3mk8wsfrwsm87i168h8kn6bnj4";
+          };
+        });
+      };
+    })
